@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Sliders, Download, RotateCcw, Shield, Layers, Eye } from 'lucide-react';
+import React from 'react';
+import { Sliders, Download, RotateCcw } from 'lucide-react';
 import { logger } from '../utils/logger';
 
 export default function ExperimentControl({ 
@@ -7,8 +7,6 @@ export default function ExperimentControl({
   onUpdateConfig,
   onResetSession
 }) {
-  const [open, setOpen] = useState(false);
-
   const handleExport = () => {
     logger.exportLogsAsJSON();
   };
@@ -43,30 +41,30 @@ export default function ExperimentControl({
           <span>Friction Pause (IV)</span>
         </label>
 
-        {/* Button Salience */}
-        <div className="flex items-center gap-1 bg-slate-800 px-2 py-1 rounded-md border border-slate-700">
+        {/* Button Salience Dropdown */}
+        <div className="flex items-center gap-1.5 bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700">
           <span className="text-slate-400 text-[10px]">Button Salience:</span>
           <select 
             value={experimentConfig.buttonSalience}
             onChange={(e) => onUpdateConfig('buttonSalience', e.target.value)}
-            className="bg-transparent text-slate-200 text-xs font-semibold focus:outline-none"
+            className="bg-slate-900 text-slate-100 text-xs font-semibold px-2 py-0.5 rounded border border-slate-700 focus:outline-none cursor-pointer"
           >
-            <option value="large">Large Banner</option>
-            <option value="small">Small Icon</option>
-            <option value="hidden">Hidden</option>
+            <option value="large" className="bg-slate-900 text-slate-100">Large Banner</option>
+            <option value="small" className="bg-slate-900 text-slate-100">Small Icon</option>
+            <option value="hidden" className="bg-slate-900 text-slate-100">Hidden</option>
           </select>
         </div>
 
-        {/* Option Framing */}
-        <div className="flex items-center gap-1 bg-slate-800 px-2 py-1 rounded-md border border-slate-700">
+        {/* Option Framing Dropdown */}
+        <div className="flex items-center gap-1.5 bg-slate-800 px-2.5 py-1 rounded-md border border-slate-700">
           <span className="text-slate-400 text-[10px]">Framing:</span>
           <select 
             value={experimentConfig.optionFraming}
             onChange={(e) => onUpdateConfig('optionFraming', e.target.value)}
-            className="bg-transparent text-slate-200 text-xs font-semibold focus:outline-none"
+            className="bg-slate-900 text-slate-100 text-xs font-semibold px-2 py-0.5 rounded border border-slate-700 focus:outline-none cursor-pointer"
           >
-            <option value="equal">Equal (Parent + Helpline)</option>
-            <option value="parent_first">Parent Default</option>
+            <option value="equal" className="bg-slate-900 text-slate-100">Equal (Parent + Helpline)</option>
+            <option value="parent_first" className="bg-slate-900 text-slate-100">Parent Default</option>
           </select>
         </div>
       </div>

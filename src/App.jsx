@@ -10,13 +10,61 @@ import ExperimentControl from './components/ExperimentControl';
 import { findScriptedResponse } from './data/scriptedResponses';
 import { locales } from './locales/strings';
 import { logger } from './utils/logger';
-import { Send, Bot, User, Sparkles, Shield, AlertTriangle, RefreshCw, MessageSquare, HeartHandshake } from 'lucide-react';
+import { Send, Bot, Shield, MessageSquare } from 'lucide-react';
+
+const INITIAL_MESSAGES_BY_PROFILE = {
+  child_aarav: [
+    {
+      id: 101,
+      sender: 'ai',
+      text: "Namaste Aarav! I am a computer AI helper for school, science, and learning questions!",
+      tag: 'confident',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+  ],
+  teen_priya: [
+    {
+      id: 201,
+      sender: 'ai',
+      text: "Namaste Priya! I am a computer AI assistant. Ask me study concepts, science, or career questions!",
+      tag: 'confident',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+  ],
+  shared_family: [
+    {
+      id: 301,
+      sender: 'ai',
+      text: "Namaste! Family shared session active. Ask me school and learning questions!",
+      tag: 'confident',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+    }
+  ]
+};
 
 export default function App() {
-  const [lang, setLang] = useState('en'); // 'en', 'hi', 'hinglish'
-  const [activeProfile, setActiveProfile] = useState(PROFILES[1]); // Priya (15 yrs) default
+  // Load language from localStorage or fallback
+  const [lang, setLang] = useState(() => {
+    return localStorage.getItem('rakshai_lang') || 'en';
+  });
+
+  // Load active profile from localStorage or fallback to Priya
+  const [activeProfile, setActiveProfile] = useState(() => {
+    const saved = localStorage.getItem('rakshai_profile_id');
+    if (saved) {
+      const match = PROFILES.find(p => p.id === saved);
+      if (match) return match;
+    }
+    return PROFILES[1]; // Priya (15 yrs) default
+  });
+
   const [activeTab, setActiveTab] = useState('chat'); // 'chat' or 'guardian'
-  const [isLowBandwidth, setIsLowBandwidth] = useState(false);
+
+  // Load low bandwidth state from localStorage
+  const [isLowBandwidth, setIsLowBandwidth] = useState(() => {
+    return localStorage.getItem('rakshai_low_bandwidth') === 'true';
+  });
+
   const [childPrivacyAlert, setChildPrivacyAlert] = useState(false);
 
   // Experiment Configuration state (IVs)
@@ -27,15 +75,18 @@ export default function App() {
     optionFraming: 'equal'   // 'equal', 'parent_first'
   });
 
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      sender: 'ai',
-      text: "Namaste! I am a computer AI program. Ask me school questions or learning topics!",
-      tag: 'confident',
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+  // Load messages per profile from localStorage
+  const [messagesByProfile, setMessagesByProfile] = useState(() => {
+    try {
+      const saved = localStorage.getItem('rakshai_messages_by_profile');
+      if (saved) {
+        return JSON.parse(saved);
+      }
+    } catch (e) {
+      console.error("Failed to parse saved messages from localStorage", e);
     }
-  ]);
+    return INITIAL_MESSAGES_BY_PROFILE;
+  });
 
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -44,9 +95,36 @@ export default function App() {
 
   const t = locales[lang] || locales.en;
 
+  // Active profile's current message list
+  const currentMessages = messagesByProfile[activeProfile.id] || [];
+
+  // Persist language to localStorage
+  useEffect(() => {
+    localStorage.setItem('rakshai_lang', lang);
+  }, [lang]);
+
+  // Persist active profile ID to localStorage
+  useEffect(() => {
+    localStorage.setItem('rakshai_profile_id', activeProfile.id);
+  }, [activeProfile]);
+
+  // Persist low-bandwidth mode to localStorage
+  useEffect(() => {
+    localStorage.setItem('rakshai_low_bandwidth', String(isLowBandwidth));
+  }, [isLowBandwidth]);
+
+  // Persist messagesByProfile to localStorage whenever updated
+  useEffect(() => {
+    try {
+      localStorage.setItem('rakshai_messages_by_profile', JSON.stringify(messagesByProfile));
+    } catch (e) {
+      console.error("Failed to save messages to localStorage", e);
+    }
+  }, [messagesByProfile]);
+
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping, showFriction]);
+  }, [currentMessages, isTyping, showFriction]);
 
   const handleUpdateExperimentConfig = (key, val) => {
     setExperimentConfig(prev => ({ ...prev, [key]: val }));
@@ -55,15 +133,8 @@ export default function App() {
 
   const handleResetSession = () => {
     logger.clearLogs();
-    setMessages([
-      {
-        id: Date.now(),
-        sender: 'ai',
-        text: locales[lang]?.botLabel || "Namaste! I am a computer AI program.",
-        tag: 'confident',
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      }
-    ]);
+    setMessagesByProfile(INITIAL_MESSAGES_BY_PROFILE);
+    localStorage.removeItem('rakshai_messages_by_profile');
     logger.log('session_reset');
   };
 
@@ -78,7 +149,12 @@ export default function App() {
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    setMessages(prev => [...prev, userMsg]);
+    // Update active profile's message history
+    setMessagesByProfile(prev => ({
+      ...prev,
+      [activeProfile.id]: [...(prev[activeProfile.id] || []), userMsg]
+    }));
+
     setInput('');
     logger.log('user_message_sent', { query, lang, profileId: activeProfile.id });
 
@@ -114,11 +190,16 @@ export default function App() {
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
 
-    setMessages(prev => [...prev, aiMsg]);
+    setMessagesByProfile(prev => ({
+      ...prev,
+      [activeProfile.id]: [...(prev[activeProfile.id] || []), aiMsg]
+    }));
+
     logger.log('ai_response_delivered', { 
       tag: scripted.tag, 
       isFalseAdvice: scripted.isFalseAdvice, 
-      tagsEnabled: experimentConfig.tagsEnabled 
+      tagsEnabled: experimentConfig.tagsEnabled,
+      profileId: activeProfile.id
     });
   };
 
@@ -172,11 +253,11 @@ export default function App() {
                 setLang(e.target.value);
                 logger.log('language_changed', { newLang: e.target.value });
               }}
-              className="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-2.5 py-1.5 rounded-full border border-slate-700 focus:outline-none"
+              className="bg-slate-800 hover:bg-slate-700 text-slate-100 text-xs font-semibold px-2.5 py-1.5 rounded-full border border-slate-700 focus:outline-none cursor-pointer"
             >
-              <option value="en">English</option>
-              <option value="hi">हिंदी (Hindi)</option>
-              <option value="hinglish">Hinglish</option>
+              <option value="en" className="bg-slate-900 text-slate-100">English</option>
+              <option value="hi" className="bg-slate-900 text-slate-100">हिंदी (Hindi)</option>
+              <option value="hinglish" className="bg-slate-900 text-slate-100">Hinglish</option>
             </select>
 
             {/* Low Bandwidth Toggle */}
@@ -262,7 +343,7 @@ export default function App() {
 
             {/* Chat Messages Log */}
             <div className="flex-1 space-y-4 my-2 overflow-y-auto max-h-[55vh] pr-1">
-              {messages.map((msg) => (
+              {currentMessages.map((msg) => (
                 <div
                   key={msg.id}
                   className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
