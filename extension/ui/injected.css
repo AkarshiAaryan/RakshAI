@@ -1,0 +1,256 @@
+/* RakshAI Injected UI Styles — Scoped with .rakshai-* */
+
+.rakshai-reset {
+  box-sizing: border-box !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !important;
+  line-height: 1.4 !important;
+  color: #1e293b !important;
+}
+
+/* 1. Persistent Identity Signifier */
+#rakshai-identity-container {
+  position: fixed !important;
+  bottom: 24px !important;
+  right: 24px !important;
+  z-index: 999990 !important;
+}
+
+.rakshai-identity-badge {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  background: #0f172a !important;
+  color: #f8fafc !important;
+  padding: 8px 14px !important;
+  border-radius: 9999px !important;
+  border: 1px solid #334155 !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25) !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  transition: all 0.2s ease !important;
+  user-select: none !important;
+}
+
+.rakshai-identity-badge:hover {
+  background: #1e293b !important;
+  border-color: #0d9488 !important;
+  transform: translateY(-1px) !important;
+}
+
+.rakshai-badge-dot {
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  background: #14b8a6 !important;
+  box-shadow: 0 0 8px #14b8a6 !important;
+}
+
+/* 2. Modal Overlay & Dialog */
+.rakshai-modal-overlay {
+  position: fixed !important;
+  inset: 0 !important;
+  background: rgba(15, 23, 42, 0.75) !important;
+  backdrop-filter: blur(4px) !important;
+  z-index: 999999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 16px !important;
+  animation: rakshaiFadeIn 0.2s ease !important;
+}
+
+.rakshai-modal-card {
+  background: #ffffff !important;
+  border-radius: 16px !important;
+  max-width: 520px !important;
+  width: 100% !important;
+  padding: 24px !important;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e2e8f0 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 16px !important;
+}
+
+.rakshai-modal-header {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 12px !important;
+}
+
+.rakshai-modal-icon {
+  width: 40px !important;
+  height: 40px !important;
+  border-radius: 10px !important;
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+.rakshai-modal-title {
+  margin: 0 !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+}
+
+.rakshai-modal-desc {
+  margin: 4px 0 0 0 !important;
+  font-size: 13px !important;
+  color: #64748b !important;
+}
+
+/* Detected Category Tags */
+.rakshai-tags-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+.rakshai-tag {
+  background: #fee2e2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fca5a5 !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  padding: 4px 10px !important;
+  border-radius: 9999px !important;
+}
+
+/* Preview Box */
+.rakshai-preview-box {
+  background: #f8fafc !important;
+  border: 1px solid #cbd5e1 !important;
+  border-radius: 10px !important;
+  padding: 12px !important;
+  font-size: 13px !important;
+  color: #334155 !important;
+  max-height: 140px !important;
+  overflow-y: auto !important;
+  white-space: pre-wrap !important;
+  word-break: break-word !important;
+}
+
+/* Buttons */
+.rakshai-btn-row {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 10px !important;
+  margin-top: 8px !important;
+}
+
+.rakshai-btn {
+  padding: 10px 16px !important;
+  border-radius: 10px !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+  border: 1px solid transparent !important;
+  transition: all 0.15s ease !important;
+  text-align: center !important;
+}
+
+.rakshai-btn:focus-visible {
+  outline: 2px solid #0d9488 !important;
+  outline-offset: 2px !important;
+}
+
+.rakshai-btn-redact {
+  background: #0d9488 !important;
+  color: #ffffff !important;
+  flex: 1 !important;
+}
+
+.rakshai-btn-redact:hover {
+  background: #0f766e !important;
+}
+
+.rakshai-btn-secondary {
+  background: #f1f5f9 !important;
+  color: #334155 !important;
+  border-color: #cbd5e1 !important;
+}
+
+.rakshai-btn-secondary:hover {
+  background: #e2e8f0 !important;
+}
+
+.rakshai-btn-danger-ghost {
+  background: transparent !important;
+  color: #dc2626 !important;
+}
+
+.rakshai-btn-danger-ghost:hover {
+  background: #fee2e2 !important;
+}
+
+/* 3. Injected Response Warning Banner */
+.rakshai-response-banner {
+  background: #fffbeb !important;
+  border: 1px solid #fcd34d !important;
+  border-left: 4px solid #f59e0b !important;
+  border-radius: 8px !important;
+  padding: 10px 14px !important;
+  margin: 10px 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 12px !important;
+  font-size: 12px !important;
+  color: #92400e !important;
+  animation: rakshaiFadeIn 0.25s ease !important;
+}
+
+.rakshai-response-banner-actions {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  flex-shrink: 0 !important;
+}
+
+.rakshai-banner-btn {
+  background: #ffffff !important;
+  border: 1px solid #d97706 !important;
+  color: #92400e !important;
+  border-radius: 6px !important;
+  padding: 4px 10px !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  cursor: pointer !important;
+}
+
+.rakshai-banner-btn:hover {
+  background: #fef3c7 !important;
+}
+
+/* 4. Help & Indian Helpline Panel */
+.rakshai-helpline-card {
+  border: 1px solid #e2e8f0 !important;
+  border-radius: 10px !important;
+  padding: 12px !important;
+  background: #f8fafc !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 4px !important;
+}
+
+.rakshai-helpline-card strong {
+  color: #0f172a !important;
+  font-size: 13px !important;
+}
+
+.rakshai-helpline-card p {
+  margin: 0 !important;
+  font-size: 12px !important;
+  color: #64748b !important;
+}
+
+@keyframes rakshaiFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}

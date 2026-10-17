@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>RakshAI Settings</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="popup-header">
+      <div class="header-branding">
+        <div class="logo-badge">R</div>
+        <div>
+          <h1 class="app-title" id="txt-app-title">RakshAI</h1>
+          <p class="app-subtitle" id="txt-app-subtitle">AI Child Safety & Privacy Layer</p>
+        </div>
+      </div>
+      <div class="status-indicator" id="status-pill">
+        <span class="status-dot"></span>
+        <span id="txt-status">Active</span>
+      </div>
+    </header>
+
+    <!-- Master Switch -->
+    <div class="control-row master-switch-row">
+      <label for="toggle-master" class="control-label font-bold" id="txt-master-label">Enable RakshAI</label>
+      <input type="checkbox" id="toggle-master" class="toggle-checkbox" checked>
+    </div>
+
+    <!-- Language Selector -->
+    <div class="control-row">
+      <label for="select-lang" class="control-label" id="txt-lang-label">Language</label>
+      <select id="select-lang" class="select-input">
+        <option value="en">English</option>
+        <option value="hi">हिंदी (Hindi)</option>
+        <option value="hinglish">Hinglish</option>
+      </select>
+    </div>
+
+    <!-- Feature Toggles -->
+    <div class="features-section">
+      <div class="feature-item">
+        <label for="toggle-prompt" class="control-label" id="txt-prompt-label">Prompt Privacy Guardian</label>
+        <input type="checkbox" id="toggle-prompt" class="toggle-checkbox" checked>
+      </div>
+      <div class="feature-item">
+        <label for="toggle-response" class="control-label" id="txt-response-label">Response Safety Guardian</label>
+        <input type="checkbox" id="toggle-response" class="toggle-checkbox" checked>
+      </div>
+      <div class="feature-item">
+        <label for="toggle-research" class="control-label" id="txt-research-label">Local Research Logging</label>
+        <input type="checkbox" id="toggle-research" class="toggle-checkbox">
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="actions-section">
+      <button id="btn-export-logs" class="btn btn-primary" id="txt-export-btn">
+        Export Research Logs (JSON)
+      </button>
+      <button id="btn-clear-data" class="btn btn-secondary" id="txt-clear-btn">
+        Clear Stored Data
+      </button>
+    </div>
+
+    <!-- Notice / Disclaimer -->
+    <footer class="popup-footer">
+      <p id="txt-disclaimer">Local-first privacy layer. No personal data or prompts are transmitted to any server.</p>
+    </footer>
+  </div>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
